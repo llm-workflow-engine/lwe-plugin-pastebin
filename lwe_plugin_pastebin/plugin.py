@@ -70,7 +70,7 @@ class Pastebin(Plugin):
         title = title or conversation['conversation']['title']
         self.log.info(f"Pasting conversation ({len(conversation['messages'])} messages) with visibility: {visibility}, expire: {expire}, title: {title}")
         pb = PbWrap(self.api_developer_key)
-        if self.user_api_key:
+        if self.api_user_key:
             pb.api_user_key = self.api_user_key
         paste_url = pb.create_paste(
             content,
