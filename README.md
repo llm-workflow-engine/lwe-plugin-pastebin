@@ -6,7 +6,7 @@ Post a conversation to [https://pastebin.com](https://pastebin.com)
 
 ## Installation
 
-Grab your developer API key from [https://pastebin.com/doc_api](https://pastebin.com/doc_api) -- you'll need to have a
+Grab your API developer key from [https://pastebin.com/doc_api](https://pastebin.com/doc_api) -- you'll need to have a
 user account on [https://pastebin.com](https://pastebin.com) and be logged in to see your developer key there.
 
 Export the key into your local environment:
