@@ -57,7 +57,6 @@ plugins:
     # Any other plugins you want enabled...
   # These are the default values.
   pastebin:
-    use_conversation_title_as_name: true
     paste_defaults:
       # When the paste will expire, valid values are:
       # N = Never
