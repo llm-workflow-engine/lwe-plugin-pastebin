@@ -36,8 +36,8 @@ class Pastebin(Plugin):
 
     def setup(self):
         self.log.info(f"Setting up pastebin plugin, running with backend: {self.backend.name}")
-        self.developer_api_key = os.environ.get('PASTEBIN_DEVELOPER_API_KEY')
-        self.user_api_key = os.environ.get('PASTEBIN_USER_API_KEY')
+        self.api_developer_key = os.environ.get('PASTEBIN_API_DEVELOPER_KEY')
+        self.api_user_key = os.environ.get('PASTEBIN_API_USER_KEY')
         self.default_expire = self.config.get('plugins.pastebin.paste_defaults.expire')
         self.default_format = self.config.get('plugins.pastebin.paste_defaults.format')
         self.default_visibility = self.config.get('plugins.pastebin.paste_defaults.visibility')
@@ -69,9 +69,9 @@ class Pastebin(Plugin):
         content = self.content_from_conversation(conversation)
         title = title or conversation['conversation']['title']
         self.log.info(f"Pasting conversation ({len(conversation['messages'])} messages) with visibility: {visibility}, expire: {expire}, title: {title}")
-        pb = PbWrap(self.developer_api_key)
+        pb = PbWrap(self.api_developer_key)
         if self.user_api_key:
-            pb.api_user_key = self.user_api_key
+            pb.api_user_key = self.api_user_key
         paste_url = pb.create_paste(
             content,
             api_paste_private=visibility,

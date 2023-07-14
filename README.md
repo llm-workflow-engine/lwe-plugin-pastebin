@@ -12,7 +12,7 @@ user account on [https://pastebin.com](https://pastebin.com) and be logged in to
 Export the key into your local environment:
 
 ```bash
-export PASTEBIN_DEVELOPER_API_KEY=<API_KEY>
+export PASTEBIN_API_DEVELOPER_KEY=<API_KEY>
 ```
 
 If you want to paste as a specific user, you'll need to generate an `api_user_key`, instructions can be found [here](https://pastebin.com/doc_api#9)
@@ -20,7 +20,7 @@ If you want to paste as a specific user, you'll need to generate an `api_user_ke
 Then export the key into your local environment:
 
 ```bash
-export PASTEBIN_USER_API_KEY=<API_KEY>
+export PASTEBIN_API_USER_KEY=<API_KEY>
 ```
 
 ### From packages
