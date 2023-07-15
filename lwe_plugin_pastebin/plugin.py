@@ -25,6 +25,10 @@ VISIBILITY_MAP = {
 }
 
 class Pastebin(Plugin):
+    """
+    Post a conversation to https://pastebin.com
+    """
+
     def default_config(self):
         return {
             'paste_defaults': {
