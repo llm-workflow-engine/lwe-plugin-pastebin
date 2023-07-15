@@ -100,8 +100,6 @@ class Pastebin(Plugin):
             # Custom everything
             {COMMAND} public 10M My custom title
         """
-        if not self.backend.conversation_id:
-            return False, None, "No current conversation"
         success, conversation_data, user_message = self.backend.get_conversation()
         if not success:
             return success, conversation_data, user_message
