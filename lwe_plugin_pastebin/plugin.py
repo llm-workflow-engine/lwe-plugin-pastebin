@@ -29,11 +29,6 @@ class Pastebin(Plugin):
     Post a conversation to https://pastebin.com
     """
 
-    def incompatible_backends(self):
-        return [
-            'browser',
-        ]
-
     def default_config(self):
         return {
             'paste_defaults': {
