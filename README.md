@@ -42,7 +42,7 @@ git clone https://github.com/llm-workflow-engine/lwe-plugin-pastebin.git
 Install the development package:
 
 ```bash
-cd llm-workflow-engine
+cd lwe-plugin-pastebin
 pip install -e .
 ```
 
