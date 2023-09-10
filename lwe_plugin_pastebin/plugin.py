@@ -8,21 +8,21 @@ import lwe.core.util as util
 from pbwrap import Pastebin as PbWrap
 
 EXPIRE_TIMES = [
-    'N',
-    '10M',
-    '1H',
-    '1D',
-    '1W',
-    '2W',
-    '1M',
-    '6M',
-    '1Y',
+    "N",
+    "10M",
+    "1H",
+    "1D",
+    "1W",
+    "2W",
+    "1M",
+    "6M",
+    "1Y",
 ]
 
 VISIBILITY_MAP = {
-    'public': 0,
-    'unlisted': 1,
-    'private': 2,
+    "public": 0,
+    "unlisted": 1,
+    "private": 2,
 }
 
 
@@ -33,29 +33,33 @@ class Pastebin(Plugin):
 
     def default_config(self):
         return {
-            'paste_defaults': {
-                'expire': 'N',
-                'format': 'text',
-                'visibility': 'public',
+            "paste_defaults": {
+                "expire": "N",
+                "format": "text",
+                "visibility": "public",
             },
-            'include_raw_link': False,
+            "include_raw_link": False,
         }
 
     def setup(self):
-        self.log.info(f"Setting up pastebin plugin, running with backend: {self.backend.name}")
-        self.api_developer_key = os.environ.get('PASTEBIN_API_DEVELOPER_KEY')
-        self.api_user_key = os.environ.get('PASTEBIN_API_USER_KEY')
-        self.default_expire = self.config.get('plugins.pastebin.paste_defaults.expire')
-        self.default_format = self.config.get('plugins.pastebin.paste_defaults.format')
-        self.default_visibility = self.config.get('plugins.pastebin.paste_defaults.visibility')
-        self.include_raw_link = self.config.get('plugins.pastebin.include_raw_link')
+        self.log.info(
+            f"Setting up pastebin plugin, running with backend: {self.backend.name}"
+        )
+        self.api_developer_key = os.environ.get("PASTEBIN_API_DEVELOPER_KEY")
+        self.api_user_key = os.environ.get("PASTEBIN_API_USER_KEY")
+        self.default_expire = self.config.get("plugins.pastebin.paste_defaults.expire")
+        self.default_format = self.config.get("plugins.pastebin.paste_defaults.format")
+        self.default_visibility = self.config.get(
+            "plugins.pastebin.paste_defaults.visibility"
+        )
+        self.include_raw_link = self.config.get("plugins.pastebin.include_raw_link")
 
     def get_shell_completions(self, _base_shell_completions):
         commands = {}
-        commands[util.command_with_leader('pastebin')] = {
-            'public': util.list_to_completion_hash(EXPIRE_TIMES),
-            'unlisted': util.list_to_completion_hash(EXPIRE_TIMES),
-            'private': util.list_to_completion_hash(EXPIRE_TIMES),
+        commands[util.command_with_leader("pastebin")] = {
+            "public": util.list_to_completion_hash(EXPIRE_TIMES),
+            "unlisted": util.list_to_completion_hash(EXPIRE_TIMES),
+            "private": util.list_to_completion_hash(EXPIRE_TIMES),
         }
         return commands
 
@@ -64,25 +68,29 @@ class Pastebin(Plugin):
 
     def content_from_conversation(self, conversation):
         content_parts = []
-        for message in conversation['messages']:
-            content_parts.append(self.role_content_wrapper(message['role']))
-            if isinstance(message['message'], dict):
-                message_content = json.dumps(message['message'], indent=2)
+        for message in conversation["messages"]:
+            content_parts.append(self.role_content_wrapper(message["role"]))
+            if isinstance(message["message"], dict):
+                message_content = json.dumps(message["message"], indent=2)
             else:
-                message_content = message['message']
+                message_content = message["message"]
             content_parts.append(message_content)
         return "\n\n".join(content_parts)
 
     def build_raw_url(self, url):
         parsed_url = urlparse(url)
-        last_part = parsed_url.path.split('/')[-1]
-        raw_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '/raw/' + last_part, '', '', ''))
+        last_part = parsed_url.path.split("/")[-1]
+        raw_url = urlunparse(
+            (parsed_url.scheme, parsed_url.netloc, "/raw/" + last_part, "", "", "")
+        )
         return raw_url
 
     def paste(self, conversation, visibility, expire, title=None):
         content = self.content_from_conversation(conversation)
-        title = title or conversation['conversation']['title']
-        self.log.info(f"Pasting conversation ({len(conversation['messages'])} messages) with visibility: {visibility}, expire: {expire}, title: {title}")
+        title = title or conversation["conversation"]["title"]
+        self.log.info(
+            f"Pasting conversation ({len(conversation['messages'])} messages) with visibility: {visibility}, expire: {expire}, title: {title}"
+        )
         pb = PbWrap(self.api_developer_key)
         if self.api_user_key:
             pb.api_user_key = self.api_user_key
