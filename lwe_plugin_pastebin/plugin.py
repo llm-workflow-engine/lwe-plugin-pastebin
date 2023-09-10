@@ -1,5 +1,6 @@
 import os
 import json
+from urllib.parse import urlparse, urlunparse
 
 from lwe.core.plugin import Plugin
 import lwe.core.util as util
@@ -24,6 +25,7 @@ VISIBILITY_MAP = {
     'private': 2,
 }
 
+
 class Pastebin(Plugin):
     """
     Post a conversation to https://pastebin.com
@@ -36,6 +38,7 @@ class Pastebin(Plugin):
                 'format': 'text',
                 'visibility': 'public',
             },
+            'include_raw_link': False,
         }
 
     def setup(self):
@@ -45,6 +48,7 @@ class Pastebin(Plugin):
         self.default_expire = self.config.get('plugins.pastebin.paste_defaults.expire')
         self.default_format = self.config.get('plugins.pastebin.paste_defaults.format')
         self.default_visibility = self.config.get('plugins.pastebin.paste_defaults.visibility')
+        self.include_raw_link = self.config.get('plugins.pastebin.include_raw_link')
 
     def get_shell_completions(self, _base_shell_completions):
         commands = {}
@@ -68,6 +72,12 @@ class Pastebin(Plugin):
                 message_content = message['message']
             content_parts.append(message_content)
         return "\n\n".join(content_parts)
+
+    def build_raw_url(self, url):
+        parsed_url = urlparse(url)
+        last_part = parsed_url.path.split('/')[-1]
+        raw_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '/raw/' + last_part, '', '', ''))
+        return raw_url
 
     def paste(self, conversation, visibility, expire, title=None):
         content = self.content_from_conversation(conversation)
@@ -130,4 +140,7 @@ class Pastebin(Plugin):
             result = self.paste(conversation_data, visibility, expire, title)
         except Exception as e:
             return False, None, e
-        return True, result, f"Pasted content to: {result}"
+        user_message_parts = [f"Paste URL: {result}"]
+        if self.include_raw_link:
+            user_message_parts.append(f"Raw URL: {self.build_raw_url(result)}")
+        return True, result, "\n".join(user_message_parts)

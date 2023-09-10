@@ -72,6 +72,8 @@ plugins:
       format: text
       # Valid values: public, unlisted, private
       visibility: public
+    # If true, include the link to the raw version of the paste.
+    include_raw_link: false
 ```
 
 ## Usage
