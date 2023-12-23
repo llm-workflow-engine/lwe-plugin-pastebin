@@ -39,6 +39,7 @@ class Pastebin(Plugin):
                 "visibility": "public",
             },
             "include_raw_link": False,
+            "exclude_system_messages": False,
         }
 
     def setup(self):
@@ -53,6 +54,7 @@ class Pastebin(Plugin):
             "plugins.pastebin.paste_defaults.visibility"
         )
         self.include_raw_link = self.config.get("plugins.pastebin.include_raw_link")
+        self.exclude_system_messages = self.config.get("plugins.pastebin.exclude_system_messages")
 
     def get_shell_completions(self, _base_shell_completions):
         commands = {}
@@ -69,6 +71,8 @@ class Pastebin(Plugin):
     def content_from_conversation(self, conversation):
         content_parts = []
         for message in conversation["messages"]:
+            if self.exclude_system_messages and message["role"] == "system":
+                continue
             content_parts.append(self.role_content_wrapper(message["role"]))
             if isinstance(message["message"], dict):
                 message_content = json.dumps(message["message"], indent=2)

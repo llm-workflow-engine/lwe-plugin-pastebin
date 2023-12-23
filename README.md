@@ -74,6 +74,9 @@ plugins:
       visibility: public
     # If true, include the link to the raw version of the paste.
     include_raw_link: false
+    # If true, exclude any system messages when generating the
+    # content of the paste.
+    exclude_system_messages: false
 ```
 
 ## Usage
